@@ -1,0 +1,107 @@
+{% extends 'user/userhome.html' %}
+
+{% load static %}
+
+{% block title %}
+	Transaction History
+{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated%}
+{% if not user.is_superuser %}
+{% if not user.is_staff %}
+
+	<a href="javascript:history.back()"><span class="go-back fas fa-chevron-left">Go Back</span></a>
+	<h2 class="page-header text-justified">Transaction History</h2>
+	<form class="form-group" method="post">
+		{% csrf_token %}
+			<table data-toggle="table" data-pagination="true" class="table table-bordered">
+				<thead class="thead-dark">
+					<tr>
+						<th>Name</th>
+						<th>Card No.</th>
+						<th>Bank Name</th>
+						<th>Amount</th>
+						<th>Transaction</th>
+						<th>Time</th>
+						<th>Status</th>
+					</tr>
+				</thead>
+				<tbody id="myTable">
+				{% for txns in txns %}
+					{% if user.username == txns.to_account or user.username == txns.from_account %}
+					<tr>
+						<td>{{ txns.name }}</td>
+						<td>{{ txns.card }}</td>
+						<td>{{ txns.bank }}</td>
+						{% if txns.from_account == txns.to_account %}
+							{% if txns.txntype == 'Deposit' %}
+							<td>
+								<div style="color: green;">
+									+{{ txns.amount }}
+								</div>
+							</td>
+							<td>
+								<div style="color: green;">
+									{{ txns.txntype }}
+								</div>
+							</td>
+							{% elif txns.txntype == 'Withdraw' %}
+							<td>
+								<div style="color: red;">
+									-{{ txns.amount }}
+								</div>
+							</td>
+							<td>
+								<div style="color: red;">
+									{{ txns.txntype }}
+								</div>
+							</td>
+							{% endif %}
+						{% else %}
+							{% if user.username == txns.to_account %}
+							<td>
+								<div style="color: green;">
+									+{{ txns.amount }}
+								</div>
+							</td>
+							<td>
+								<div style="color: green;">
+									From {{ txns.from_account }}
+								</div>
+							</td>
+							{% elif user.username == txns.from_account %}
+							<td>
+								<div style="color: red;">
+									-{{ txns.amount }}
+								</div>
+							</td>
+							<td>
+								<div style="color: red;">
+									To {{ txns.to_account }}
+								</div>
+							</td>
+							{% endif %}
+						{% endif %}
+						<td>{{ txns.time }}</td>
+						<td>
+							{% if txns.txnstatus == True %}
+							<div style="color: green;"><i class="fa fa-check"></i> Completed</div>
+							{% else %}
+							<i class="fa fa-spinner"></i> Pending
+							{% endif %}
+						</td>
+					</tr>
+					{% endif %}
+				{% endfor %}
+				</tbody>
+			</table>
+
+	</form>
+
+{% else %}
+	<meta http-equiv="refresh" content="0; url={% url 'home' %}">
+{% endif %}
+{% endif %}
+{% endif %}
+{% endblock %}

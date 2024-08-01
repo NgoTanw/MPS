@@ -1,0 +1,126 @@
+{% extends 'index.html' %}
+
+{% load static %}
+
+	{% block title %}
+		Signup
+	{% endblock %}
+
+{% block content %}
+{% if not user.is_authenticated%}
+
+<div class="container">
+	{% if messages %}
+	<ul class="messages text-center">
+		{% for message in messages %}
+			{% if message.tags == 'info' %}
+			<div class="alert alert-info" role="alert">
+			{% elif message.tags == 'success' %}
+			<div class="alert alert-success" role="alert">
+			{% elif message.tags == 'warning' %}
+			<div class="alert alert-warning" role="alert">
+			{% elif message.tags == 'error' %}
+			<div class="alert alert-danger" role="alert">
+			{% endif %}
+				<li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+			</div>
+		{% endfor %}
+	</ul>
+	{% endif %}
+	<div id="user-reg" class="signup-box border border-top-0">
+		<div class="header-container">
+			<h2>User Registration</h2>
+		</div>
+		<form class="form-group signup" method="post">
+			{% csrf_token %}
+			<table class="table table-borderless">
+				<tr>
+					<td>
+						<label for="username">Username<span class="asteriskField">*</span></label>
+					</td>
+					<td>
+						<div class="input-group">
+							<input type="text" name="username" placeholder="Username" required="required" class="form-control" maxlength="100" autocomplete="off" autofocus>
+							<span class="input-group-addon"><span class="fas fa-user"></span></span>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label for="email">E-mail<span class="asteriskField">*</span></label>
+					</td>
+					<td>
+						<div class="input-group">
+							<input type="email" name="email" placeholder="E-mail" required="required" class="emailinput form-control" autocomplete="off">
+							<span class="input-group-addon"><span class="fas fa-envelope"></span></span>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label for="mobile">Mobile no.<span class="asteriskField">*</span></label>
+					</td>
+					<td>
+						<div class="input-group">
+							<input type="tel" name="mobile" placeholder="Mobile No." required="required" class="form-control" maxlength="10" autocomplete="off">
+							<span class="input-group-addon"><span class="fas fa-mobile"></span></span>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label for="gender">Gender<span class="asteriskField">*</span></label>
+					</td>
+					<td>
+						<div class="input-group">
+							<select id = "myList" name="gender" required="required" class="custom-select dropdown-primary">
+								<option value = "none" selected disabled hidden>Select Gender</option>
+			 					<option value = "Male">Male</option>
+								<option value = "Female">Female</option>
+			 					<option value = "Others">Others</option>
+							</select>
+							<span class="input-group-addon"><span class="fas fa-venus-mars"></span></span>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label for="dob">Date of Birth<span class="asteriskField">*</span></label>
+					</td>
+					<td>
+						<div class="input-group">
+							<input type="date" name="dob" required="required" class="form-control" maxlength="20" autocomplete="off">
+							<span class="input-group-addon"><span class="fas fa-table"></span></span>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label for="password1">Password<span class="asteriskField">*</span></label>
+					</td>
+					<td>
+						<div class="input-group">
+							<input type="password" name="password1" placeholder="Password" required="required" class="form-control">
+							<span class="input-group-addon"><span class="fas fa-key"></span></span>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label for="password2">Confirm Password<span class="asteriskField">*</span></label>
+					</td>
+					<td>
+						<div class="input-group">
+							<input type="password" name="password2" placeholder="Confirm Password" required="required" class="form-control">
+							<span class="input-group-addon"><span class="fas fa-eye"></span></span>
+						</div>
+					</td>
+				</tr>
+			</table>
+			<input type="submit" class="btn btn-primary submit-btn" value="Signup">
+			<p>Already have an account? <a href="{% url 'home' %}">Login</a></p>
+		</form>
+	</div>
+</div>
+{% endif %}
+{% endblock %}
